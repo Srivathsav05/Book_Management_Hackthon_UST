@@ -63,13 +63,13 @@ public class OrderController {
             throw new OutOfStockException("Not enough stock");
         }
         order1 = orderService.createOrder(order1);
-        OrderDto dto = new OrderDto(
+        return new OrderDto(
                 order1.getId(),
                 customerServiceClient.getCustomerById(order1.getCustomerId()),
                 bookServiceClient.getBookById(order1.getBookId()),
                 order1.getQuantity(),
                 order1.getStatus()
         );
-        return dto;
+
     }
 }

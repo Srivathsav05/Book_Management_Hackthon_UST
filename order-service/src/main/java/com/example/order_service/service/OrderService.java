@@ -20,7 +20,8 @@ public class OrderService {
     public Order getOrderById(Long id) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isPresent()) {
-            return order.get();
+            Order o1= order.get();
+            return o1;
         } else {
             throw new OrderNotFound("Order not found with id: " + id);
         }

@@ -3,13 +3,12 @@ package com.example.order_service.controller;
 import com.example.order_service.clients.BookServiceClient;
 import com.example.order_service.clients.CustomerServiceClient;
 import com.example.order_service.converter.OrderDtoConverter;
+import com.example.order_service.dto.BookDto;
 import com.example.order_service.dto.OrderDto;
 import com.example.order_service.entity.Order;
+import com.example.order_service.exception.OutOfStockException;
 import com.example.order_service.service.OrderService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -59,6 +58,10 @@ public class OrderController {
                 order.getQuantity(),
                 order.getStatus()
         );
+        BookDto bookDto = bookServiceClient.getBookById(order.getBookId());
+        if (bookDto.stock() < order.getQuantity()) {
+            throw new OutOfStockException("Not enough stock");
+        }
         order1 = orderService.createOrder(order1);
         OrderDto dto = new OrderDto(
                 order1.getId(),
